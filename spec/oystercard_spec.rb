@@ -32,18 +32,19 @@ describe Oystercard do
     end
   end
 
-  describe 'touch_in' do
-    # it 'changes in_journey status to true when touch_in' do
-    #   subject.touch_in
-    #   expect(subject).to be_in_journey
-    # end
+  describe '#touch_in' do
     it 'changes in_journey status to true when touch_in' do
+      subject.top_up(1)
       expect {subject.touch_in}.to change(subject, :in_journey).from(false).to(true)
+    end
+    it 'raises an error when there is insufficient funds (at least £1)' do
+      expect {subject.touch_in}.to raise_error("Insufficient funds :(")
     end
   end
 
-  describe 'touch_out' do
+  describe '#touch_out' do
     it 'changes in_journey status to true when touch_out' do
+      subject.top_up(1)
       subject.touch_in
       expect {subject.touch_out}.to change(subject, :in_journey).from(true).to(false)
     end
