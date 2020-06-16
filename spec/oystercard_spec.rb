@@ -1,6 +1,8 @@
 require 'oystercard'
 
 describe Oystercard do
+  
+  let(:station) {double :Waterloo}
 
   let(:station){ double :station }
 
@@ -37,25 +39,33 @@ describe Oystercard do
   describe '#touch_in' do
     it 'changes in_journey status to true when touch_in' do
       subject.top_up(1)
-      expect {subject.touch_in}.to change(subject, :in_journey).from(false).to(true)
+      expect {subject.touch_in(station)}.to change(subject, :in_journey?).from(false).to(true)
     end
     it 'raises an error when there is insufficient funds (at least £1)' do
-      expect {subject.touch_in}.to raise_error("Insufficient funds :(")
+      expect {subject.touch_in(station)}.to raise_error("Insufficient funds :(")
+    end
+    it 'will store the entry station name after touch in' do
+      subject.top_up(1)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
     end
   end
 
   describe '#touch_out' do
     before do
       subject.top_up(1)
-      subject.touch_in
+      subject.touch_in(station)
     end
 
     it 'changes in_journey status to true when touch_out' do
-      expect {subject.touch_out}.to change(subject, :in_journey).from(true).to(false)
+      expect {subject.touch_out}.to change(subject, :in_journey?).from(true).to(false)
     end
     it 'deducts the amount by the minimum charge' do
-      expect {subject.touch_out}.to change{ subject.balance }.by -1
+      expect {subject.touch_out}.to change{ subject.balance }.by(-1)
+    end
+    it 'expects entry_station to be nil after touch out' do
+      expect {subject.touch_out}.to change{ subject.entry_station }.from(station).to(nil)
     end
   end
-
+  
 end
