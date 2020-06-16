@@ -26,4 +26,10 @@ describe Oystercard do
     end
   end
 
+  describe '#in_journey?' do
+    it 'returns default value of not in_journey (false) after initialization' do
+      expect(subject).not_to be_in_journey
+    end
+  end
+
 end
