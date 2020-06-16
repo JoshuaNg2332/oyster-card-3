@@ -3,7 +3,7 @@ class Oystercard
   DEFAULT_START_BALANCE = 0
   MAXIMUM_BALANCE = 90
   BALANCE_ERROR = "Topup will exceed maximum balance of #{MAXIMUM_BALANCE}, Topup not processed"
-  attr_reader :balance
+  attr_reader :balance, :in_journey
 
   def initialize
     @balance = DEFAULT_START_BALANCE
@@ -20,6 +20,14 @@ class Oystercard
 
   def in_journey?
     @in_journey
+  end
+
+  def touch_in
+    @in_journey = true
+  end
+
+  def touch_out
+    @in_journey = false
   end
 
 end
