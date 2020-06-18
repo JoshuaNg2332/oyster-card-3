@@ -2,9 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   
-  let(:station) {double :Waterloo}
-
-  let(:station){ double :station }
+  let(:station) {double :station}
 
   describe '@balance' do
     it 'initializes a new card with a default balance of 0' do
